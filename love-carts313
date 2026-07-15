@@ -2,102 +2,57 @@
 <html dir="rtl" lang="ar">
 <head>
     <meta charset="UTF-8">
-    <title>لوحة التحكم - إدارة المنتجات</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجري الاحترافي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; background: #f4f7f6; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h2 { color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; }
-        input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-        button { background: #28a745; color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 4px; }
-        button.delete { background: #dc3545; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: right; }
-        th { background: #f8f9fa; }
+        body { font-family: 'Cairo', sans-serif; background-color: #f8f9fa; margin: 0; padding: 0; }
+        header { background: #232f3e; color: white; padding: 20px; text-align: center; font-size: 24px; font-weight: bold; }
+        .container { max-width: 1200px; margin: 20px auto; padding: 10px; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .product-card { background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden; transition: 0.3s; text-align: center; padding-bottom: 15px; }
+        .product-card:hover { transform: translateY(-5px); }
+        .product-card img { width: 100%; height: 250px; object-fit: cover; }
+        .product-card h3 { font-size: 18px; margin: 15px 0; color: #333; }
+        .price { color: #e47911; font-size: 20px; font-weight: bold; margin-bottom: 15px; }
+        .btn-whatsapp { background: #25d366; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; text-decoration: none; font-weight: bold; display: inline-block; }
+        .btn-whatsapp:hover { background: #128c7e; }
     </style>
 </head>
 <body>
 
+<header>متجري الإلكتروني</header>
+
 <div class="container">
-    <h2>إضافة منتج جديد</h2>
-    <div class="form-group">
-        <label>اسم المنتج:</label>
-        <input type="text" id="pName" placeholder="مثلاً: ساعة رولكس">
+    <div id="products-list" class="products-grid">
+        <!-- المنتجات ستظهر هنا -->
     </div>
-    <div class="form-group">
-        <label>السعر:</label>
-        <input type="number" id="pPrice" placeholder="مثلاً: 500">
-    </div>
-    <div class="form-group">
-        <label>رابط الصورة:</label>
-        <input type="text" id="pImage" placeholder="انسخ رابط الصورة هنا">
-    </div>
-    <button onclick="addProduct()">إضافة المنتج للموقع</button>
-
-    <hr>
-
-    <h2>المنتجات الحالية</h2>
-    <table id="productsTable">
-        <thead>
-            <tr>
-                <th>الصورة</th>
-                <th>الاسم</th>
-                <th>السعر</th>
-                <th>إجراءات</th>
-            </tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-    </table>
 </div>
 
 <script>
-    // وظيفة لعرض المنتجات من التخزين المحلي (LocalStorage)
-    function displayProducts() {
-        const products = JSON.parse(localStorage.getItem('myProducts') || '[]');
-        const tbody = document.getElementById('tbody');
-        tbody.innerHTML = '';
+    function loadProducts() {
+        const productsList = document.getElementById('products-list');
+        const savedProducts = JSON.parse(localStorage.getItem('myProducts') || '[]');
 
-        products.forEach((p, index) => {
-            tbody.innerHTML += `
-                <tr>
-                    <td><img src="${p.image}" width="50"></td>
-                    <td>${p.name}</td>
-                    <td>${p.price} ريال</td>
-                    <td><button class="delete" onclick="deleteProduct(${index})">حذف</button></td>
-                </tr>
+        if (savedProducts.length === 0) {
+            productsList.innerHTML = '<p style="text-align:center; grid-column: 1/-1;">لا توجد منتجات حالياً. أضف منتجات من لوحة التحكم.</p>';
+            return;
+        }
+
+        productsList.innerHTML = '';
+        savedProducts.forEach(product => {
+            const whatsappLink = `https://wa.me/201234567890?text=${encodeURIComponent('أهلاً، أود طلب: ' + product.name)}`;
+            productsList.innerHTML += `
+                <div class="product-card">
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <div class="price">${product.price} ريال</div>
+                    <a href="${whatsappLink}" target="_blank" class="btn-whatsapp">اطلب عبر واتساب</a>
+                </div>
             `;
         });
     }
-
-    // إضافة منتج
-    function addProduct() {
-        const name = document.getElementById('pName').value;
-        const price = document.getElementById('pPrice').value;
-        const image = document.getElementById('pImage').value;
-
-        if(name && price && image) {
-            const products = JSON.parse(localStorage.getItem('myProducts') || '[]');
-            products.push({ name, price, image });
-            localStorage.setItem('myProducts', JSON.stringify(products));
-            alert('تمت الإضافة بنجاح!');
-            displayProducts();
-        } else {
-            alert('يرجى ملء جميع الحقول');
-        }
-    }
-
-    // حذف منتج
-    function deleteProduct(index) {
-        let products = JSON.parse(localStorage.getItem('myProducts') || '[]');
-        products.splice(index, 1);
-        localStorage.setItem('myProducts', JSON.stringify(products));
-        displayProducts();
-    }
-
-    // تحميل المنتجات عند فتح الصفحة
-    displayProducts();
+    window.onload = loadProducts;
 </script>
-
 </body>
 </html>
