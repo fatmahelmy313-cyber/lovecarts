@@ -1,93 +1,103 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html dir="rtl" lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Carts | متجر محمد البدري للهدايا ❤️</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>لوحة التحكم - إدارة المنتجات</title>
     <style>
-        body { font-family: 'Cairo', sans-serif; scroll-behavior: smooth; }
-        .gradient-pink { background: linear-gradient(135deg, #db2777 0%, #f472b6 100%); }
+        body { font-family: sans-serif; background: #f4f7f6; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h2 { color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { background: #28a745; color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 4px; }
+        button.delete { background: #dc3545; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: right; }
+        th { background: #f8f9fa; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body>
 
-    <!-- القائمة العلوية -->
-    <nav class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <span class="text-2xl font-black text-pink-600">Love Carts ❤️</span>
-            <a href="https://wa.me/201114170415 text=استفسار" class="bg-green-500 text-white px-4 py-2 rounded-full font-bold text-sm shadow-md">واتساب: 01114170415</a>
-        </div>
-    </nav>
+<div class="container">
+    <h2>إضافة منتج جديد</h2>
+    <div class="form-group">
+        <label>اسم المنتج:</label>
+        <input type="text" id="pName" placeholder="مثلاً: ساعة رولكس">
+    </div>
+    <div class="form-group">
+        <label>السعر:</label>
+        <input type="number" id="pPrice" placeholder="مثلاً: 500">
+    </div>
+    <div class="form-group">
+        <label>رابط الصورة:</label>
+        <input type="text" id="pImage" placeholder="انسخ رابط الصورة هنا">
+    </div>
+    <button onclick="addProduct()">إضافة المنتج للموقع</button>
 
-    <!-- واجهة الموقع -->
-    <header class="py-12 px-4 text-center bg-white border-b">
-        <h1 class="text-3xl md:text-5xl font-black text-gray-900 mb-4">أجمل الهدايا في <span class="text-pink-600">عين شمس والقاهرة</span> 🇪🇬</h1>
-        <p class="text-lg text-gray-500 max-w-xl mx-auto mb-6 italic text-center">بإدارة الأستاذ محمد البدري - هدايا تعبر عن مشاعرك</p>
-    </header>
+    <hr>
 
-    <!-- نموذج الطلب السريع -->
-    <section id="order-form" class="py-12 container mx-auto px-4">
-        <div class="max-w-md mx-auto bg-white p-8 rounded-[2rem] shadow-2xl border border-pink-50">
-            <h2 class="text-2xl font-black mb-6 text-center text-pink-600">طلب سريع عبر واتساب 🛍️</h2>
-            
-            <form id="whatsappForm" class="space-y-4">
-                <div>
-                    <label class="block mb-2 font-bold text-sm">اسمك الكريم</label>
-                    <input type="text" id="name" required placeholder="أدخل اسمك" 
-                           class="w-full p-4 border rounded-2xl bg-gray-50 outline-none focus:ring-2 focus:ring-pink-500">
-                </div>
-                
-                <div>
-                    <label class="block mb-2 font-bold text-sm">رقم الموبايل</label>
-                    <input type="tel" id="user_phone" required placeholder="رقمك للتواصل" 
-                           class="w-full p-4 border rounded-2xl bg-gray-50 outline-none focus:ring-2 focus:ring-pink-500 text-right">
-                </div>
-                
-                <div>
-                    <label class="block mb-2 font-bold text-sm">عنوان التوصيل</label>
-                    <textarea id="address" required placeholder="اكتب عنوانك بالتفصيل" 
-                              class="w-full p-4 border rounded-2xl bg-gray-50 outline-none focus:ring-2 focus:ring-pink-500 h-24"></textarea>
-                </div>
+    <h2>المنتجات الحالية</h2>
+    <table id="productsTable">
+        <thead>
+            <tr>
+                <th>الصورة</th>
+                <th>الاسم</th>
+                <th>السعر</th>
+                <th>إجراءات</th>
+            </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+    </table>
+</div>
 
-                <button type="button" onclick="sendToWhatsApp()" 
-                        class="w-full bg-[#25d366] text-white py-4 rounded-2xl font-black text-xl shadow-lg hover:bg-green-600 transition-all flex justify-center items-center gap-2">
-                    تأكيد الطلب (واتساب) ✅
-                </button>
-            </form>
-        </div>
-    </section>
+<script>
+    // وظيفة لعرض المنتجات من التخزين المحلي (LocalStorage)
+    function displayProducts() {
+        const products = JSON.parse(localStorage.getItem('myProducts') || '[]');
+        const tbody = document.getElementById('tbody');
+        tbody.innerHTML = '';
 
-    <!-- تذييل الموقع ببياناتك -->
-    <footer class="py-10 text-center bg-gray-100 text-gray-600">
-        <p class="font-bold mb-2">محمد البدري - Love Carts</p>
-        <p class="text-sm px-4">العنوان: شارع ابوالفتوح عبدالله، عين شمس الشرقية، جسر السويس، القاهرة</p>
-        <p class="mt-4 text-xs">© 2024 جميع الحقوق محفوظة</p>
-    </footer>
+        products.forEach((p, index) => {
+            tbody.innerHTML += `
+                <tr>
+                    <td><img src="${p.image}" width="50"></td>
+                    <td>${p.name}</td>
+                    <td>${p.price} ريال</td>
+                    <td><button class="delete" onclick="deleteProduct(${index})">حذف</button></td>
+                </tr>
+            `;
+        });
+    }
 
-    <script>
-    function sendToWhatsApp() {
-        const myNumber = "201114170415"; // رقم هاتفك بصيغة دولية بدون +
-        const name = document.getElementById('name').value;
-        const user_phone = document.getElementById('user_phone').value;
-        const address = document.getElementById('address').value;
+    // إضافة منتج
+    function addProduct() {
+        const name = document.getElementById('pName').value;
+        const price = document.getElementById('pPrice').value;
+        const image = document.getElementById('pImage').value;
 
-        if(name && user_phone && address) {
-            const message = "طلب جديد من متجر الحب ❤️%0A" +
-                            "--------------------------%0A" +
-                            "*العميل:* " + name + "%0A" +
-                            "*الموبايل:* " + user_phone + "%0A" +
-                            "*العنوان:* " + address + "%0A" +
-                            "--------------------------%0A" +
-                            "يرجى التواصل لتأكيد الطلب.";
-
-            const whatsappURL = "https://wa.me/" + myNumber + "?text=" + message;
-            window.open(whatsappURL, '_blank').focus();
+        if(name && price && image) {
+            const products = JSON.parse(localStorage.getItem('myProducts') || '[]');
+            products.push({ name, price, image });
+            localStorage.setItem('myProducts', JSON.stringify(products));
+            alert('تمت الإضافة بنجاح!');
+            displayProducts();
         } else {
-            alert("يرجى إكمال البيانات أولاً");
+            alert('يرجى ملء جميع الحقول');
         }
     }
-    </script>
+
+    // حذف منتج
+    function deleteProduct(index) {
+        let products = JSON.parse(localStorage.getItem('myProducts') || '[]');
+        products.splice(index, 1);
+        localStorage.setItem('myProducts', JSON.stringify(products));
+        displayProducts();
+    }
+
+    // تحميل المنتجات عند فتح الصفحة
+    displayProducts();
+</script>
+
 </body>
 </html>
