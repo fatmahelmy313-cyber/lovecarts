@@ -1,60 +1,60 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Carts | هدايا تعبر عن مشاعرك ❤️</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Cairo', sans-serif; scroll-behavior: smooth; }
-        .gradient-pink { background: linear-gradient(135deg, #db2777 0%, #f472b6 100%); }
-    </style>
-</head>
-<body class="bg-gray-50 text-gray-800">
-
-    <!-- Navbar -->
-    <nav class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <span class="text-2xl font-black text-pink-600">Love Carts ❤️</span>
-            <a href="https://wa.me/201XXXXXXXXX" class="bg-green-500 text-white px-4 py-2 rounded-full font-bold text-sm shadow-md hover:bg-green-600">اطلب واتساب</a>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <header class="py-16 px-4 text-center bg-white border-b">
-        <h1 class="text-4xl md:text-5xl font-black text-gray-900 mb-4">أجمل الهدايا في <span class="text-pink-600">مصر</span> 🇪🇬</h1>
-        <p class="text-lg text-gray-500 max-w-xl mx-auto mb-8 font-medium italic">"اخترنا لك أفضل المنتجات لنساعدك على رسم الابتسامة على وجوه من تحب."</p>
-        <div class="flex justify-center gap-2 mb-4">
-            <span class="bg-pink-100 text-pink-700 text-xs font-bold px-3 py-1 rounded-full">دفع عند الاستلام</span>
-            <span class="bg-pink-100 text-pink-700 text-xs font-bold px-3 py-1 rounded-full">توصيل سريع</span>
-        </div>
-    </header>
-
-    <!-- Product Card -->
-    <section class="py-12 container mx-auto px-4">
-        <div class="max-w-md mx-auto bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100">
-            <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=800" class="w-full h-64 object-cover" alt="Gift Box">
-            <div class="p-8 text-center">
-                <h3 class="text-2xl font-black mb-2">بوكس السعادة (بريميوم)</h3>
-                <p class="text-gray-500 mb-6 font-bold text-sm leading-relaxed italic text-center">يحتوي على تشكيلة فاخرة مختارة بعناية لتناسب جميع الأذواق.</p>
-                
-                <div class="flex justify-center items-baseline gap-2 mb-8 text-center">
-                    <span class="text-4xl font-black text-pink-600">750</span>
-                    <span class="text-lg font-bold text-gray-400">جنيه مصري</span>
-                </div>
-
-                <a href="#order-form" class="block w-full gradient-pink text-white py-4 rounded-2xl font-black text-xl shadow-lg hover:shadow-pink-200 transition-all transform hover:-translate-y-1">
-                    اطلب الآن 🛍️
-                </a>
+<!-- قسم نموذج الطلب المرتبط بالواتساب -->
+<section id="order-form" class="py-12 container mx-auto px-4">
+    <div class="max-w-md mx-auto bg-white p-8 rounded-3xl shadow-lg border border-pink-100">
+        <h2 class="text-2xl font-black mb-6 text-center text-gray-800">بيانات الشحن 🚚</h2>
+        
+        <form id="whatsappForm" class="space-y-4">
+            <div>
+                <label class="block mb-2 font-bold text-sm">الاسم بالكامل</label>
+                <input type="text" id="name" required placeholder="مثال: أحمد محمد" 
+                       class="w-full p-4 border rounded-2xl bg-gray-50 outline-none focus:ring-2 focus:ring-pink-500 transition">
             </div>
-        </div>
-    </section>
+            
+            <div>
+                <label class="block mb-2 font-bold text-sm">رقم الموبايل</label>
+                <input type="tel" id="phone" required placeholder="01XXXXXXXXX" 
+                       class="w-full p-4 border rounded-2xl bg-gray-50 outline-none focus:ring-2 focus:ring-pink-500 text-left">
+            </div>
+            
+            <div>
+                <label class="block mb-2 font-bold text-sm">العنوان بالتفصيل</label>
+                <textarea id="address" required placeholder="المحافظة، المنطقة، اسم الشارع" 
+                          class="w-full p-4 border rounded-2xl bg-gray-50 outline-none focus:ring-2 focus:ring-pink-500 h-24"></textarea>
+            </div>
 
-    <!-- Footer -->
-    <footer class="py-10 text-center border-t text-gray-400 text-sm">
-        <p>© 2024 Love Carts Egypt</p>
-    </footer>
+            <button type="button" onclick="sendToWhatsApp()" 
+                    class="w-full bg-[#25d366] text-white py-4 rounded-2xl font-black text-xl shadow-lg hover:bg-green-600 transition-all flex justify-center items-center gap-2">
+                إرسال الطلب عبر واتساب 💬
+            </button>
+        </form>
+    </div>
+</section>
 
-</body>
-</html>
+<script>
+function sendToWhatsApp() {
+    // 1. أدخل رقم واتساب الخاص بك هنا (مصحوباً بكود الدولة 20 لمصر)
+    const myNumber = "201XXXXXXXXX"; 
+
+    // 2. جلب البيانات من النموذج
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
+
+    if(name && phone && address) {
+        // 3. تجهيز نص الرسالة
+        const message = "طلب جديد من Love Carts ❤️%0A" +
+                        "--------------------------%0A" +
+                        "*الاسم:* " + name + "%0A" +
+                        "*الموبايل:* " + phone + "%0A" +
+                        "*العنوان:* " + address + "%0A" +
+                        "--------------------------%0A" +
+                        "أرجو تأكيد الطلب المذكور أعلاه.";
+
+        // 4. فتح رابط الواتساب
+        const whatsappURL = "https://wa.me/" + myNumber + "?text=" + message;
+        window.open(whatsappURL, '_blank').focus();
+    } else {
+        alert("يرجى ملء جميع البيانات أولاً");
+    }
+}
+</script>
